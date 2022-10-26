@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcGreeter.Protos";
+
+service User{
+	rpc getUser (requestedUser) returns (userModel);
+	rpc getAllUsers (requestedAllUsers) returns (stream userModel);
+}
+
+message requestedAllUsers{
+
+}
+
+message requestedUser{
+	int32 userId = 1;
+}
+
+message userModel{
+	string name = 1;
+	string password = 2;
+	string role = 3;
+}

@@ -1,0 +1,15 @@
+﻿version: '3.8'
+services:
+  sql:
+    image: "mcr.microsoft.com/mssql/server" 
+    environment:
+       ACCEPT_EULA: "Y"
+       SA_PASSWORD: "Test123!@#"
+    ports:
+      - "11433:1433"
+  grpc:
+    build: .
+    depends_on: 
+      - sql
+    ports:
+      - "8284:80"
