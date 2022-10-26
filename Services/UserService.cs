@@ -21,7 +21,7 @@ namespace GrpcGreeter.Services
 
             try
             {
-                using (SqlConnection con = new SqlConnection("Data Source=10.10.49.226,11433;User ID=sa;Password=Test123!@#;"))
+                using (SqlConnection con = new SqlConnection("Data Source=103.4.95.77,11433;User ID=sa;Password=Test123!@#;"))
                 {
                     SqlCommand cmd = new SqlCommand("SELECT * FROM [users].[dbo].[users] where id = " + request.UserId, con);
                     cmd.CommandType = CommandType.Text;
