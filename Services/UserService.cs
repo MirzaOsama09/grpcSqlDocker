@@ -2,7 +2,10 @@
 using GrpcGreeter.Models;
 using GrpcGreeter.Protos;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
 using System.Data;
+using User = GrpcGreeter.Models.User;
+
 namespace GrpcGreeter.Services
 {
     public class UserService : Protos.User.UserBase
@@ -15,10 +18,30 @@ namespace GrpcGreeter.Services
             _context = context;
         }
 
-        public override Task<userModel> getUser(requestedUser request, ServerCallContext context)
+        public override async Task<userModel> getUser(requestedUser request, ServerCallContext context)
         {
+            
             userModel outputUser = new userModel();
+            try
+            {
+                var user = _context.users.Find(request.UserId);
 
+                if (user != null)
+                {
+                    outputUser.Name = user.username;
+                    outputUser.Role = user.role;
+                }
+                else
+                {
+                    outputUser.Name = "Not found";
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+
+/*
             try
             {
                 using (SqlConnection con = new SqlConnection("Data Source=103.4.95.77,11433;User ID=sa;Password=Test123!@#;"))
@@ -39,7 +62,9 @@ namespace GrpcGreeter.Services
             catch (Exception ex)
             {
                 throw ex;
-            }
+            }*/
+
+
             /*var user = _context.users.Find(request.UserId);
 
             if (user != null)
@@ -57,7 +82,20 @@ namespace GrpcGreeter.Services
 
             try
             {
-                using (SqlConnection con = new SqlConnection("Data Source=10.10.49.226,11433;User ID=sa;Password=Test123!@#;"))
+
+                var users = _context.users.ToList();
+
+                foreach(User u in users)
+                {
+                    userModel user = new userModel();
+
+                    user.Name = u.username;
+                    user.Password = u.password;
+                    user.Role = u.role;
+
+                    allUsers.Add(user);
+                }
+                /*using (SqlConnection con = new SqlConnection())
                 {
                     SqlCommand cmd = new SqlCommand("SELECT * FROM [users].[dbo].[users]", con);
                     cmd.CommandType = CommandType.Text;
@@ -74,7 +112,7 @@ namespace GrpcGreeter.Services
                         allUsers.Add(user);
                     }
                     con.Close();
-                }
+                }*/
 
                 foreach (userModel user in allUsers)
                 {
