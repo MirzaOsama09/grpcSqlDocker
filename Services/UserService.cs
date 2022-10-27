@@ -4,7 +4,6 @@ using GrpcGreeter.Protos;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
-using User = GrpcGreeter.Models.User;
 
 namespace GrpcGreeter.Services
 {
@@ -18,7 +17,7 @@ namespace GrpcGreeter.Services
             _context = context;
         }
 
-        public override async Task<userModel> getUser(requestedUser request, ServerCallContext context)
+        public override Task<userModel> getUser(requestedUser request, ServerCallContext context)
         {
             
             userModel outputUser = new userModel();
@@ -85,7 +84,7 @@ namespace GrpcGreeter.Services
 
                 var users = _context.users.ToList();
 
-                foreach(User u in users)
+                foreach(GrpcGreeter.Models.User u in users)
                 {
                     userModel user = new userModel();
 
