@@ -17,7 +17,7 @@ namespace GrpcGreeter.Services
             _context = context;
         }
 
-        public override Task<userModel> getUser(requestedUser request, ServerCallContext context)
+        public override async Task<userModel> getUser(requestedUser request, ServerCallContext context)
         {
             
             userModel outputUser = new userModel();
@@ -37,31 +37,31 @@ namespace GrpcGreeter.Services
             }
             catch(Exception ex)
             {
-                throw;
+                throw ex;
             }
 
-/*
-            try
-            {
-                using (SqlConnection con = new SqlConnection("Data Source=103.4.95.77,11433;User ID=sa;Password=Test123!@#;"))
-                {
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM [users].[dbo].[users] where id = " + request.UserId, con);
-                    cmd.CommandType = CommandType.Text;
-                    con.Open();
-                    SqlDataReader rdr = cmd.ExecuteReader();
-                    while (rdr.Read())
-                    {
-                        outputUser.Name = rdr[1].ToString();
-                        outputUser.Password = rdr[2].ToString();
-                        outputUser.Role = rdr[3].ToString();
-                    }
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }*/
+            /*
+                        try
+                        {
+                            using (SqlConnection con = new SqlConnection("Data Source=103.4.95.77,11433;User ID=sa;Password=Test123!@#;"))
+                            {
+                                SqlCommand cmd = new SqlCommand("SELECT * FROM [users].[dbo].[users] where id = " + request.UserId, con);
+                                cmd.CommandType = CommandType.Text;
+                                con.Open();
+                                SqlDataReader rdr = cmd.ExecuteReader();
+                                while (rdr.Read())
+                                {
+                                    outputUser.Name = rdr[1].ToString();
+                                    outputUser.Password = rdr[2].ToString();
+                                    outputUser.Role = rdr[3].ToString();
+                                }
+                                con.Close();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }*/
 
 
             /*var user = _context.users.Find(request.UserId);
@@ -72,7 +72,7 @@ namespace GrpcGreeter.Services
                 outputUser.Role = user.role;
             }
 */
-            return Task.FromResult(outputUser);
+            return await Task.FromResult(outputUser);
         }
 
         public override async Task getAllUsers(requestedAllUsers request, IServerStreamWriter<userModel> responseStream, ServerCallContext context)
